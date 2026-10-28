@@ -1,0 +1,357 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Telegram Trigger').first().json.message.text }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "28b4975c-fa73-482e-9a5e-297c007ed283",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.8-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        208
+      ],
+      "id": "2589db06-6b24-4e75-bfca-fabd6e2051c2",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Telegram Trigger').first().json.message.chat.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        272,
+        208
+      ],
+      "id": "4f0f64f7-e961-40f9-87ab-2993aef7a4f2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "google search in SerpApiSearch Google for information relevant to the user's question. Create a suitable search query from the user's question and return relevant results.",
+        "q": "={{ $fromAI('query', 'Generate a relevant Google search query based on the user question', 'string') }}",
+        "additionalFields": {
+          "gl": "in"
+        },
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApiTool",
+      "typeVersion": 1,
+      "position": [
+        448,
+        208
+      ],
+      "id": "bedca2e0-6cee-4fd2-89f9-266cb2e9e564",
+      "name": "Google search in SerpApi",
+      "credentials": {
+        "serpApi": {
+          "id": "9bGJ1X34Pq0RsBSN",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "51c805e0-c64b-4d01-810f-2c1c60b8972a",
+      "name": "Telegram Trigger",
+      "webhookId": "18c9f983-3e6e-4c82-8269-e80cb40a69e7",
+      "credentials": {
+        "telegramApi": {
+          "id": "bjE8KpZD6XVb8dXy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('AI Agent').first().json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        544,
+        0
+      ],
+      "id": "aba845dd-a067-4163-a946-8ae43b1acc4b",
+      "name": "Send a text message",
+      "webhookId": "05c89f88-4986-408d-a306-8725d79cfff6",
+      "credentials": {
+        "telegramApi": {
+          "id": "bjE8KpZD6XVb8dXy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        880,
+        112
+      ],
+      "id": "827fe7df-7f39-442c-a3d0-0ff13561f715",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search?engine=google",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine ",
+              "value": "google "
+            },
+            {
+              "name": "q",
+              "value": "latest India world techonology sports news today"
+            },
+            {
+              "name": "api_key",
+              "value": "14f5b188a8fc275401378f5dfcf6a6bf53287c8582ab852c4b849729dd1ca773"
+            },
+            {
+              "name": "tbs",
+              "value": "qdr:d"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1072,
+        112
+      ],
+      "id": "e542948c-3e65-4071-9510-2676ba7cefb0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "chatId": "5646699157",
+        "text": "={{ $('Code in JavaScript').first().json.newsHtml.replace(/<h2>/g, '\\n').replace(/<\\/h2>/g, '\\n').replace(/<h3>/g, '\\n').replace(/<\\/h3>/g, '\\n').replace(/<p>/g, '\\n').replace(/<\\/p>/g, '').replace(/<hr>/g, '\\n----------------\\n').replace(/<a href=\"([^\"]+)\">Read full news<\\/a>/g, '$1').replace(/<[^>]*>/g, '') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1600,
+        192
+      ],
+      "id": "e8ef26b6-7dda-4546-9d54-937b968de72d",
+      "name": "Send a text message1",
+      "webhookId": "c1a0a534-8170-4b58-80da-31dc1f9e1580",
+      "credentials": {
+        "telegramApi": {
+          "id": "bjE8KpZD6XVb8dXy",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "ratneshchavan07@gmail.com",
+        "toEmail": "sungtask99@gmail.com",
+        "subject": "NexaAI Agent - Daily News Update",
+        "html": "={{ $('Code in JavaScript').first().json.newsHtml }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1840,
+        128
+      ],
+      "id": "10ae38cc-084e-4f69-869e-2dbf8d0802bb",
+      "name": "Send an Email",
+      "webhookId": "6c928d9c-716a-4768-bcc7-2a50058127f3",
+      "credentials": {
+        "smtp": {
+          "id": "Cy7ZSfILUXvDFquE",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $('HTTP Request').first().json;\n\nconst news = data.organic_results || data.news_results || [];\n\nconst html = news.slice(0, 5).map((item, i) => `\n  <h3>${i + 1}. ${item.title || 'News headline'}</h3>\n  <p>${item.snippet || ''}</p>\n  <p><a href=\"${item.link || '#'}\">Read full news</a></p>\n  <hr>\n`).join('');\n\nreturn [{\n  json: {\n    newsHtml: `<h2>📰 NexaAI Agent - Daily News</h2>${html || '<p>No news found in HTTP Request output.</p>'}`\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        112
+      ],
+      "id": "735b9c3d-0913-4aba-860e-5493d2671fc9",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search in SerpApi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "c3389896-629e-40fe-85f6-f476beaa07c7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "657d03ba953272e02b58d49f6855f2ad25794bc80395b04c29eaa4a587efb296"
+  },
+  "nodeGroups": [],
+  "id": "470j7mr8noTFz6EH",
+  "tags": []
+}
