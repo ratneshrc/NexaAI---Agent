@@ -13,7 +13,7 @@
         224,
         0
       ],
-      "id": "28b4975c-fa73-482e-9a5e-297c007ed283",
+      "id": "",
       "name": "AI Agent"
     },
     {
@@ -27,7 +27,7 @@
         96,
         208
       ],
-      "id": "2589db06-6b24-4e75-bfca-fabd6e2051c2",
+      "id": "",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
@@ -67,7 +67,7 @@
         448,
         208
       ],
-      "id": "bedca2e0-6cee-4fd2-89f9-266cb2e9e564",
+      "id": "",
       "name": "Google search in SerpApi",
       "credentials": {
         "serpApi": {
@@ -156,7 +156,7 @@
             },
             {
               "name": "api_key",
-              "value": "14f5b188a8fc275401378f5dfcf6a6bf53287c8582ab852c4b849729dd1ca773"
+              "value": ""
             },
             {
               "name": "tbs",
@@ -177,7 +177,7 @@
     },
     {
       "parameters": {
-        "chatId": "5646699157",
+        "chatId": "",
         "text": "={{ $('Code in JavaScript').first().json.newsHtml.replace(/<h2>/g, '\\n').replace(/<\\/h2>/g, '\\n').replace(/<h3>/g, '\\n').replace(/<\\/h3>/g, '\\n').replace(/<p>/g, '\\n').replace(/<\\/p>/g, '').replace(/<hr>/g, '\\n----------------\\n').replace(/<a href=\"([^\"]+)\">Read full news<\\/a>/g, '$1').replace(/<[^>]*>/g, '') }}",
         "additionalFields": {}
       },
@@ -187,7 +187,7 @@
         1600,
         192
       ],
-      "id": "e8ef26b6-7dda-4546-9d54-937b968de72d",
+      "id": "",
       "name": "Send a text message1",
       "webhookId": "c1a0a534-8170-4b58-80da-31dc1f9e1580",
       "credentials": {
@@ -199,8 +199,8 @@
     },
     {
       "parameters": {
-        "fromEmail": "ratneshchavan07@gmail.com",
-        "toEmail": "sungtask99@gmail.com",
+        "fromEmail": "abc@gmail.com",
+        "toEmail": "xyz@gmail.com",
         "subject": "NexaAI Agent - Daily News Update",
         "html": "={{ $('Code in JavaScript').first().json.newsHtml }}",
         "options": {}
@@ -211,7 +211,7 @@
         1840,
         128
       ],
-      "id": "10ae38cc-084e-4f69-869e-2dbf8d0802bb",
+      "id": "",
       "name": "Send an Email",
       "webhookId": "6c928d9c-716a-4768-bcc7-2a50058127f3",
       "credentials": {
@@ -231,7 +231,7 @@
         1312,
         112
       ],
-      "id": "735b9c3d-0913-4aba-860e-5493d2671fc9",
+      "id": "",
       "name": "Code in JavaScript"
     }
   ],
