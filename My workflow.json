@@ -94,7 +94,7 @@
       "webhookId": "18c9f983-3e6e-4c82-8269-e80cb40a69e7",
       "credentials": {
         "telegramApi": {
-          "id": "bjE8KpZD6XVb8dXy",
+          "id": "",
           "name": "Telegram account"
         }
       }
@@ -116,7 +116,7 @@
       "webhookId": "05c89f88-4986-408d-a306-8725d79cfff6",
       "credentials": {
         "telegramApi": {
-          "id": "bjE8KpZD6XVb8dXy",
+          "id": "",
           "name": "Telegram account"
         }
       }
